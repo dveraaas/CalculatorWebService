@@ -9,10 +9,10 @@ using NLog;
 
 namespace CalculatorService.server.Controllers
 {
-    public class CalculatorController : Controller
-    {
+	public class Calculator2Controller : Controller
+	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
-		
+
 		// GET: Calculator
 		#region /calculator2/add
 		[HttpPost]
@@ -35,13 +35,13 @@ namespace CalculatorService.server.Controllers
 
 				// Delete the last '+' on the response.operation
 				response.operation = response.operation.Substring(0, response.operation.Length - 3);
-			}else
+			}
+			else
 			{
-				response.Total = int.Parse(request.nums[0].ToString());
-				response.operation = request.nums[0].ToString();
+				response.Total = int.Parse(response.operation);
 			}
 
-			logger.Trace(response.operation+" = "+response.Total);
+			logger.Trace(response.operation + " = " + response.Total);
 
 			string Json = JsonConvert.SerializeObject(response);
 			return Json;
@@ -116,7 +116,7 @@ namespace CalculatorService.server.Controllers
 			Response response = new Response();
 			response.Total = 0;
 			response.Total = request.num1 / request.num2;
-			response.operation = $"{request.num1} / {request.num2} (Rest: {request.num1%request.num2})";
+			response.operation = $"{request.num1} / {request.num2} (Rest: {request.num1 % request.num2})";
 
 			logger.Trace(response.operation + " = " + response.Total);
 
@@ -141,6 +141,18 @@ namespace CalculatorService.server.Controllers
 			string Json = JsonConvert.SerializeObject(response);
 			return Json;
 		}
+		#endregion
+		#region/calculator2/complet
+		[HttpPost]
+		[ActionName("Complet")]
+		public string CompletOperation(Request request)
+		{
+			logger.Trace("----- Method Complex Operation -----");
+			Response response = new Response();
+			string Json = JsonConvert.SerializeObject(response);
+			return Json;
+		}
+
 		#endregion
 	}
 }
