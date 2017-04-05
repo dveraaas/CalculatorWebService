@@ -24,29 +24,31 @@ namespace CalculatorService.server.Controllers
 			Response response = new Response();
 			response.Total = 0;
 
-			// If on the List are more than 1 parameter
-			if (request.nums.Count > 1)
-			{
-				foreach (int item in request.nums)
+				// If on the List are more than 1 parameter
+				if (request.nums.Count > 1)
 				{
-					response.Total += item;
-					response.operation += item + " + ";
+					foreach (int item in request.nums)
+					{
+						response.Total += item;
+						response.operation += item + " + ";
+					}
+
+					// Delete the last '+' on the response.operation
+					response.operation = response.operation.Substring(0, response.operation.Length - 3);
+				}
+				else
+				{
+					response.Total = int.Parse(request.nums[0].ToString());
+					response.operation = request.nums[0].ToString();
 				}
 
-				// Delete the last '+' on the response.operation
-				response.operation = response.operation.Substring(0, response.operation.Length - 3);
-			}else
-			{
-				response.Total = int.Parse(request.nums[0].ToString());
-				response.operation = request.nums[0].ToString();
-			}
-
-			logger.Trace(response.operation+" = "+response.Total);
+				logger.Trace(response.operation + " = " + response.Total);
 
 			string Json = JsonConvert.SerializeObject(response);
 			return Json;
 		}
 		#endregion
+
 		#region /calculator2/sub
 		[HttpPost]
 		[ActionName("sub")]
@@ -80,6 +82,7 @@ namespace CalculatorService.server.Controllers
 			return Json;
 		}
 		#endregion
+
 		#region /calculator2/mult
 		[HttpPost]
 		[ActionName("mult")]
@@ -105,6 +108,7 @@ namespace CalculatorService.server.Controllers
 			return Json;
 		}
 		#endregion
+
 		#region /calculator2/div
 		[HttpPost]
 		[ActionName("div")]
@@ -124,6 +128,7 @@ namespace CalculatorService.server.Controllers
 			return Json;
 		}
 		#endregion
+
 		#region /calculator2/sqr
 		[HttpPost]
 		[ActionName("sqr")]
