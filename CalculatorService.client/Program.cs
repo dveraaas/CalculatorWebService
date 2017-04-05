@@ -35,7 +35,6 @@ namespace CalculatorService.client
 					
 					switch (selection.ToLowerInvariant().Trim())
 					{
-
 						case "add":
 						case "1":
 							test.Connection(selection.ToLowerInvariant().Trim());

@@ -26,7 +26,6 @@ namespace CalculatorService.client
 		#region GetAddNumbers
 		public Request GetAddNumbers()
 		{
-			
 			requestAdd.nums = new List<int>();
 			Console.WriteLine("------- Operation Add -------");
 			Console.WriteLine("Write the expression without '='. Write '0' for exit.");
@@ -47,28 +46,18 @@ namespace CalculatorService.client
 						string[] numbers = num.Trim().Split(separator);
 						foreach (string item in numbers)
 						{
-							try
-							{
-								requestAdd.nums.Add(int.Parse(item));
-
-							}
-							catch (Exception ex)
-							{
-								ex = new Exception("Your expression is not valid!");
-								Console.ForegroundColor = ConsoleColor.Red;
-								Console.WriteLine(ex.Message);
-								Console.ForegroundColor = ConsoleColor.Gray;
-								GetAddNumbers();
-							}
+							requestAdd.nums.Add(int.Parse(item));
 						}
 					}
 				} while (number != 0);
 			}
 			catch (Exception e)
-			{
+			{ 
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
+				Console.WriteLine("The expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Gray;
+				requestAdd.nums.Clear();
 				GetAddNumbers();
 			}
 
@@ -98,19 +87,7 @@ namespace CalculatorService.client
 						string[] numbers = num.Trim().Split(separator);
 						foreach (string item in numbers)
 						{
-							try
-							{
 								requestSub.nums.Add(int.Parse(item));
-
-							}
-							catch (Exception ex)
-							{
-								ex = new Exception("Your expression is not valid!");
-								Console.ForegroundColor = ConsoleColor.Red;
-								Console.WriteLine(ex.Message);
-								Console.ForegroundColor = ConsoleColor.Gray;
-								GetSubtractNumbers();
-							}
 						}
 					}
 				} while (number != 0);
@@ -119,6 +96,7 @@ namespace CalculatorService.client
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
+				Console.WriteLine("The expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Gray;
 				GetSubtractNumbers();
 			}
@@ -149,19 +127,7 @@ namespace CalculatorService.client
 						string[] numbers = num.Trim().Split(separator);
 						foreach (string item in numbers)
 						{
-							try
-							{
 								requestMult.nums.Add(int.Parse(item));
-
-							}
-							catch (Exception ex)
-							{
-								ex = new Exception("Your expression is not valid!");
-								Console.ForegroundColor = ConsoleColor.Red;
-								Console.WriteLine(ex.Message);
-								Console.ForegroundColor = ConsoleColor.Gray;
-								GetMultNumbers(); 
-							}
 						}
 					}
 				} while (number != 0);
@@ -170,6 +136,7 @@ namespace CalculatorService.client
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
+				Console.WriteLine("The expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Gray;
 				GetMultNumbers();
 			}
@@ -193,9 +160,9 @@ namespace CalculatorService.client
 			}
 			catch (Exception ex)
 			{
-				ex = new Exception("Your expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(ex.Message);
+				Console.WriteLine("The expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Gray;
 				GetDivNumbers(); 
 			}
@@ -216,9 +183,9 @@ namespace CalculatorService.client
 			}
 			catch (Exception ex)
 			{
-				ex = new Exception("Your expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(ex.Message);
+				Console.WriteLine("The expression is not valid!");
 				Console.ForegroundColor = ConsoleColor.Gray;
 				GetSqrNumbers(); 
 			}
@@ -244,7 +211,7 @@ namespace CalculatorService.client
 			{
 				case "add":
 				case "1":
-					request = GetAddNumbers();
+						request=GetAddNumbers();
 					break;
 				case "subtract":
 				case "2":
