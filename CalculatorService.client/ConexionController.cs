@@ -7,6 +7,7 @@ using System.Net;
 using CalculatorService.client.Models;
 using System.IO;
 using Newtonsoft.Json;
+using NLog;
 
 namespace CalculatorService.client
 {
@@ -21,6 +22,7 @@ namespace CalculatorService.client
 		private Request requestMult = new Request();
 		private DivRequest requestDiv = new DivRequest();
 		private SqrRequest sqrrequest = new SqrRequest();
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 
 		// Methods for user parameters depending selection 
 		#region GetAddNumbers
@@ -28,6 +30,7 @@ namespace CalculatorService.client
 		{
 			requestAdd.nums = new List<int>();
 			Console.WriteLine("------- Operation Add -------");
+			logger.Debug("Method Add");
 			Console.WriteLine("Write the expression without '='. Write '0' for exit.");
 			separator = '+';
 			url = "http://localhost:52147/calculator/add";
@@ -60,7 +63,6 @@ namespace CalculatorService.client
 				requestAdd.nums.Clear();
 				GetAddNumbers();
 			}
-
 			return requestAdd;
 		}
 		#endregion
@@ -69,6 +71,7 @@ namespace CalculatorService.client
 		{
 			requestSub.nums = new List<int>();
 			Console.WriteLine("------- Operation Subtract -------");
+			logger.Debug("Method Subtract");
 			Console.WriteLine("Write the expression without '='. Write '0' for exit.");
 			separator = '-';
 			url = "http://localhost:52147/calculator/sub";
@@ -109,6 +112,7 @@ namespace CalculatorService.client
 			
 			requestMult.nums = new List<int>();
 			Console.WriteLine("------- Operation Multiply -------");
+			logger.Debug("Method Multiply");
 			Console.WriteLine("Write the expression without '='. Write '0' for exit.");
 			separator = '*';
 			url = "http://localhost:52147/calculator/mult";
@@ -140,7 +144,6 @@ namespace CalculatorService.client
 				Console.ForegroundColor = ConsoleColor.Gray;
 				GetMultNumbers();
 			}
-
 			return requestMult;
 		}
 		#endregion
@@ -149,6 +152,7 @@ namespace CalculatorService.client
 		{
 			
 			Console.WriteLine("------- Operation Divide -------");
+			logger.Debug("Method Divide");
 			url = "http://localhost:52147/calculator/div";
 			try
 			{
@@ -174,6 +178,7 @@ namespace CalculatorService.client
 		{
 			
 			Console.WriteLine("------- Operation Square -------");
+			logger.Debug("Method Square");
 			url = "http://localhost:52147/calculator/sqr";
 
 			try
@@ -189,7 +194,6 @@ namespace CalculatorService.client
 				Console.ForegroundColor = ConsoleColor.Gray;
 				GetSqrNumbers(); 
 			}
-
 			return sqrrequest;
 
 		}
@@ -274,6 +278,7 @@ namespace CalculatorService.client
 
 				Console.WriteLine("The server responds: ");
 				Console.WriteLine($"{response.operation} = {response.Total}");
+				logger.Debug($"{response.operation} = {response.Total}");
 
 		}
 	}
