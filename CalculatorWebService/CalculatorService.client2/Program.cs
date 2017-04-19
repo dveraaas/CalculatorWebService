@@ -23,8 +23,10 @@ namespace CalculatorService.client2
 				{
 					case "y":
 					case "yes":
+					do {
 						Console.WriteLine("Enter your Id Tracking");
 						Id_Tracking = Console.ReadLine();
+					} while (Id_Tracking=="");
 						break;
 				}
 
