@@ -63,7 +63,13 @@ namespace CalculatorService.client2
 						break;
 						case "5":
 						case "history":
+						if (Id_Tracking != "")
+						{
 							test.Journal(Id_Tracking);
+						}else
+						{
+							fullTest.GetHistory("http://localhost:53459/calculator/history");
+						}
 						break;
 						case "test":
 						case "6":
