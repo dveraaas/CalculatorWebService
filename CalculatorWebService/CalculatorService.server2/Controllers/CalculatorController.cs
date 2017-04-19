@@ -41,7 +41,7 @@ namespace CalculatorService.server2.Controllers
 				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Sum }");
 
-				if (Request.Headers != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
 						{
 							string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
 
@@ -97,7 +97,7 @@ namespace CalculatorService.server2.Controllers
 				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Difference}");
 
-				if (Request.Headers != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
 				{
 					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
 
@@ -147,7 +147,7 @@ namespace CalculatorService.server2.Controllers
 				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Product}");
 
-				if (Request.Headers != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
 				{
 					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
 
@@ -199,7 +199,7 @@ namespace CalculatorService.server2.Controllers
 				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Quotient}(Reaminder: {response.Remainder})");
 
-				if (Request.Headers != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
 				{
 					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
 

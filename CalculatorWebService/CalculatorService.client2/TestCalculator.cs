@@ -70,7 +70,6 @@ namespace CalculatorService.client2
 
 				Console.WriteLine("The server responds: ");
 				Console.WriteLine(resp);
-				//Console.WriteLine($"{response.Operation} = {response.Total}");
 
 				logger.Info($"The server responds: {resp}");
 				logger.Info("-------------------------------------------------------------");

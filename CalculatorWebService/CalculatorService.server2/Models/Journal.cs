@@ -12,11 +12,11 @@ namespace CalculatorService.server2.Models
 		public void StoreOperation(Operations op)
 		{
 			string journal = GetJournal();
-			
+
 			using (StreamWriter sw = new StreamWriter(file))
 			{
 				sw.WriteLine(journal);
-				sw.WriteLine(op.operation+" => "+op.Calculation+" || "+op.Key+" || "+op.Date);
+				sw.WriteLine($"{ op.operation} => {op.Calculation} || {op.Key} || { op.Date}");
 				sw.Close();
 			}
 

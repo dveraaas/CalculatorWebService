@@ -16,6 +16,7 @@ namespace CalculatorService.client2
 				// Class for testing with user parameters
 				ConexionController test = new ConexionController();
 
+				// Id_Tracking if you want save on the journal the operations
 				string selection,Id_Tracking="";
 				Console.WriteLine("Do you want to save the operations?(Y/N)");
 				string decision = Console.ReadLine();
@@ -65,13 +66,13 @@ namespace CalculatorService.client2
 						break;
 						case "5":
 						case "history":
-						if (Id_Tracking != "")
-						{
-							test.Journal(Id_Tracking);
-						}else
-						{
-							fullTest.GetHistory("http://localhost:53459/calculator/history");
-						}
+							if (Id_Tracking != "")
+							{
+								test.Journal(Id_Tracking);
+							}else
+							{
+								fullTest.GetHistory("http://localhost:53459/calculator/history");
+							}
 						break;
 						case "test":
 						case "6":
@@ -98,7 +99,7 @@ namespace CalculatorService.client2
 						&& (selection.ToLowerInvariant().Trim() != "subtract" || selection.ToLowerInvariant().Trim() != "2")
 						&& (selection.ToLowerInvariant().Trim() != "multiply" || selection.ToLowerInvariant().Trim() != "3")
 						&& (selection.ToLowerInvariant().Trim() != "divide" || selection.ToLowerInvariant().Trim() != "4")
-						&& (selection.ToLowerInvariant().Trim() != "sqr" || selection.ToLowerInvariant().Trim() != "5" || selection.ToLowerInvariant().Trim() != "square")
+						&& (selection.ToLowerInvariant().Trim() != "history" || selection.ToLowerInvariant().Trim() != "5")
 						&& (selection.ToLowerInvariant().Trim() != "test" || selection.ToLowerInvariant().Trim() != "6")
 						&& (selection.ToLowerInvariant().Trim() != "exit" || selection.ToLowerInvariant().Trim() != "7"));
 		}
