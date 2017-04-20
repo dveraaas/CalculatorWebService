@@ -9,7 +9,7 @@ namespace CalculatorService.server2
 	public class JournalService
 	{
 		// GET: Journal
-		private const string STORE_PATH = "C:\\Users\\Diego\\Documents\\Visual Studio 2015\\Projects\\CalculatorService.client\\CalculatorService.server2\\Store.txt";
+		private const string STORE_PATH = "C:\\Users\\Diego\\.ssh\\CalculatorWebService\\CalculatorWebService\\CalculatorService.server\\Store.txt";
 
 		public static void StoreOperation(Models.Operations op)
 		{
