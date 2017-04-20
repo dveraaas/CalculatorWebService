@@ -202,6 +202,7 @@
     </Compile>
     <Compile Include="Models\AddRequest.cs" />
     <Compile Include="Models\AddResponse.cs" />
+    <Compile Include="Models\CommonError.cs" />
     <Compile Include="Models\DivRequest.cs" />
     <Compile Include="Models\DivResponse.cs" />
     <Compile Include="Models\MultRequest.cs" />
@@ -234,9 +235,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Journal\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

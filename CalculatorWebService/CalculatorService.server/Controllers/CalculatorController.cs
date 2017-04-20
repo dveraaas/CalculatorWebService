@@ -76,6 +76,7 @@ namespace CalculatorService.server2.Controllers
 					throw new ArgumentNullException();
 				}
 				response.Difference = Reqsub.Nums[0];
+				
 				for (int i = 0; i < Reqsub.Nums.Length; i++)
 				{
 					total += Reqsub.Nums[i];
@@ -123,10 +124,12 @@ namespace CalculatorService.server2.Controllers
 				{
 					throw new ArgumentNullException();
 				}
-				response.Product = 1;
+				//response.Product = 1;
+				response.Product = Reqmult.Factors.Aggregate(1, (a,b) => a * b);
+
 				foreach (int item in Reqmult.Factors)
 				{
-					response.Product *= item;
+					//response.Product *= item;
 					operation += $"{item} * ";
 				}
 
@@ -175,7 +178,6 @@ namespace CalculatorService.server2.Controllers
 				{
 					response.Quotient = Reqdiv.Dividend.Value / Reqdiv.Divisor.Value;
 					response.Remainder = Reqdiv.Dividend.Value % Reqdiv.Divisor.Value;
-
 				}
 
 				operation = $"{Reqdiv.Dividend} / {Reqdiv.Divisor}";
