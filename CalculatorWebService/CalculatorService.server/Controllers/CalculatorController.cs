@@ -32,7 +32,7 @@ namespace CalculatorService.server2.Controllers
 					return Error400().ErrorMessage.ToString();
 					//throw new ArgumentNullException();
 				}
-				
+
 				foreach (int item in Reqadd.Addends)
 				{
 					response.Sum += item;
@@ -58,7 +58,7 @@ namespace CalculatorService.server2.Controllers
 				logger.Error(e.Message);
 				return e.Message;
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				return Error500().ErrorMessage.ToString();
 			}
@@ -114,6 +114,10 @@ namespace CalculatorService.server2.Controllers
 				logger.Error(e.Message);
 				return e.Message;
 			}
+			catch (Exception)
+			{
+				return Error500().ErrorMessage.ToString();
+			}
 		}
 		#endregion
 		
@@ -159,6 +163,10 @@ namespace CalculatorService.server2.Controllers
 			{
 				logger.Error(e.Message);
 				return e.Message;
+			}
+			catch (Exception)
+			{
+				return Error500().ErrorMessage.ToString();
 			}
 		}
 		#endregion
@@ -212,6 +220,10 @@ namespace CalculatorService.server2.Controllers
 			{
 				logger.Error(ex.Message);
 				return ex.Message;
+			}
+			catch (Exception)
+			{
+				return Error500().ErrorMessage.ToString();
 			}
 		}
 		#endregion
