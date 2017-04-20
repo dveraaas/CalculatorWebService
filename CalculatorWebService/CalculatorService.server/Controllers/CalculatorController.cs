@@ -28,7 +28,9 @@ namespace CalculatorService.server2.Controllers
 			{
 				if (Reqadd == null || Reqadd.Addends == null)
 				{
-					throw new ArgumentNullException();
+					
+					return Error400().ErrorMessage.ToString();
+					//throw new ArgumentNullException();
 				}
 
 				foreach (int item in Reqadd.Addends)
@@ -73,18 +75,20 @@ namespace CalculatorService.server2.Controllers
 			{
 				if (Reqsub == null || Reqsub.Nums == null)
 				{
-					throw new ArgumentNullException();
+					return Error400().ErrorMessage.ToString();
+					//throw new ArgumentNullException();
 				}
 				response.Difference = Reqsub.Nums[0];
-				for (int i = 0; i < Reqsub.Nums.Length; i++)
+
+				for (int i = 1; i < Reqsub.Nums.Length; i++)
 				{
-					total += Reqsub.Nums[i];
+					response.Difference -= Reqsub.Nums[i];
 					operation += $"{Reqsub.Nums[i]} - ";
 				}
 
 				// Subtracts the first number and delete the last '-'
 				total -= Reqsub.Nums[0];
-				response.Difference -= total;
+				operation = $"{response.Difference} - {operation}";
 
 				operation = operation.Substring(0, operation.Length - 3);
 
@@ -121,12 +125,15 @@ namespace CalculatorService.server2.Controllers
 			{
 				if (Reqmult == null || Reqmult.Factors == null)
 				{
-					throw new ArgumentNullException();
+					return Error400().ErrorMessage.ToString();
+					//throw new ArgumentNullException();
 				}
-				response.Product = 1;
+				//response.Product = 1;
+				response.Product = Reqmult.Factors.Aggregate(1, (a,b) => a * b);
+
 				foreach (int item in Reqmult.Factors)
 				{
-					response.Product *= item;
+					//response.Product *= item;
 					operation += $"{item} * ";
 				}
 
@@ -164,7 +171,8 @@ namespace CalculatorService.server2.Controllers
 			{
 				if (Reqdiv == null || !(Reqdiv.Dividend.HasValue || Reqdiv.Divisor.HasValue))
 				{
-					throw new ArgumentNullException();
+					return Error400().ErrorMessage.ToString();
+					//throw new ArgumentNullException();
 				}
 				if (Reqdiv.Divisor == 0)
 				{
@@ -175,7 +183,6 @@ namespace CalculatorService.server2.Controllers
 				{
 					response.Quotient = Reqdiv.Dividend.Value / Reqdiv.Divisor.Value;
 					response.Remainder = Reqdiv.Dividend.Value % Reqdiv.Divisor.Value;
-
 				}
 
 				operation = $"{Reqdiv.Dividend} / {Reqdiv.Divisor}";
@@ -226,7 +233,7 @@ namespace CalculatorService.server2.Controllers
 		}
 		#endregion
 
-		/* Adicional Method */
+		/* Adicional Methods */
 		#region CreateOperation
 
 		public Operations CreateOperation(string method, string op, DateTime date, string key)
@@ -239,6 +246,20 @@ namespace CalculatorService.server2.Controllers
 
 			return Operation;
 
+		}
+		#endregion
+
+		#region
+		public static CommonError Error400()
+		{
+			CommonError BadRequest = new CommonError();
+			BadRequest.ErrorCode = "RequestError";
+			BadRequest.ErrorStatus = 400;
+			BadRequest.ErrorMessage = "The request is null or the arguments are null";
+
+			logger.Error($"{BadRequest.ErrorStatus} - {BadRequest.ErrorCode} - {BadRequest.ErrorMessage}");
+
+			return BadRequest;
 		}
 		#endregion
 
