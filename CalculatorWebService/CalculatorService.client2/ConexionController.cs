@@ -13,9 +13,8 @@ namespace CalculatorService.client2
 {
 	public class ConexionController
 	{
-		private string url;
-		private string num;
-		private int number = 0;
+		private const string url= "http://localhost:53459/calculator/";
+		private string op;
 		private char separator;
 		private AddRequest Reqadd = new AddRequest();
 		private SubRequest Reqsub = new SubRequest();
@@ -31,23 +30,22 @@ namespace CalculatorService.client2
 			Console.WriteLine("------- Operation Add -------");
 			Console.WriteLine("Write the operation( Ej: 1+2+3 )");
 			separator = '+';
-			url = "http://localhost:53459/calculator/add";
 			try
 			{
-				do
-				{
 					Console.WriteLine("Operation:");
-					num = Console.ReadLine();
+					op = Console.ReadLine();
 
-					string[] numbers = num.Trim().Split(separator);
+					string[] numbers = op.Trim().Split(separator);
 					Reqadd.Addends = numbers.Select(x => int.Parse(x)).ToArray();
 
-				} while (number != 0);
-
-				HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+				HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"{url}add");
 				req.Method = "POST";
 				req.ContentType = "application/json";
-				req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+
+				if (Id_Tracking != "")
+				{
+					req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+				}
 
 				// Opens a stream,converts the request to Json and send it 
 				using (StreamWriter sw = new StreamWriter(req.GetRequestStream()))
@@ -66,20 +64,19 @@ namespace CalculatorService.client2
 					Console.WriteLine(response.Sum);
 					sr.Close();
 					Response.Close();
-				}
-
-				
+				}				
 			}
 			catch (Exception e)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
 				Console.ForegroundColor = ConsoleColor.Gray;
-				Add(Id_Tracking);
+				logger.Error(e.Message);
 			}
 
 		}
 		#endregion
+
 		#region Sub
 		public void Sub(string Id_Tracking)
 		{
@@ -87,23 +84,22 @@ namespace CalculatorService.client2
 			Console.WriteLine("------- Operation Subtract -------");
 			Console.WriteLine("Write the operation( Ej: 1-2-3 )");
 			separator = '-';
-			url = "http://localhost:53459/calculator/sub";
 			try
 			{
-				do
-				{
 					Console.WriteLine("Operation:");
-					num = Console.ReadLine();
+					op = Console.ReadLine();
 
-					string[] numbers = num.Trim().Split(separator);
+					string[] numbers = op.Trim().Split(separator);
 					Reqsub.Nums = numbers.Select(x => int.Parse(x)).ToArray();
 
-				} while (number != 0);
-
-				HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+				HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"{url}sub");
 				req.Method = "POST";
 				req.ContentType = "application/json";
-				req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+
+				if (Id_Tracking != "")
+				{
+					req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+				}
 
 				// Opens a stream,converts the request to Json and send it 
 				using (StreamWriter sw = new StreamWriter(req.GetRequestStream()))
@@ -123,18 +119,17 @@ namespace CalculatorService.client2
 					sr.Close();
 					Response.Close();
 				}
-
-				
 			}
 			catch (Exception e)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
 				Console.ForegroundColor = ConsoleColor.Gray;
-				Sub(Id_Tracking);
+				logger.Error(e.Message);
 			}
 		}
 		#endregion
+
 		#region Mult
 		public void Mult(string Id_Tracking)
 		{
@@ -143,23 +138,22 @@ namespace CalculatorService.client2
 			Console.WriteLine("------- Operation Multiply -------");
 			Console.WriteLine("Write the operation( Ej: 1*2*3 )");
 			separator = '*';
-			url = "http://localhost:53459/calculator/mult";
 			try
 			{
-				do
-				{
 					Console.WriteLine("Operation:");
-					num = Console.ReadLine();
+					op = Console.ReadLine();
 
-					string[] numbers = num.Trim().Split(separator);
+					string[] numbers = op.Trim().Split(separator);
 					Reqmult.Factors = numbers.Select(x => int.Parse(x)).ToArray();
 
-				} while (number != 0);
-
-				HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+				HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"{url}mult");
 				req.Method = "POST";
 				req.ContentType = "application/json";
-				req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+
+				if (Id_Tracking != "")
+				{
+					req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+				}
 
 				// Opens a stream,converts the request to Json and send it 
 				using (StreamWriter sw = new StreamWriter(req.GetRequestStream()))
@@ -179,8 +173,6 @@ namespace CalculatorService.client2
 					sr.Close();
 					Response.Close();
 				}
-
-				
 				
 			}
 			catch (Exception e)
@@ -188,34 +180,34 @@ namespace CalculatorService.client2
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
 				Console.ForegroundColor = ConsoleColor.Gray;
-				Mult(Id_Tracking);
+				logger.Error(e.Message);
 			}
 		}
 		#endregion
+
 		#region Div
 		public void Div(string Id_Tracking)
 		{
 			Console.WriteLine("------- Operation Divide -------");
 			separator = '/';
-			url = "http://localhost:53459/calculator/div";
 			try
 			{
-				do
-				{
 					Console.WriteLine("Dividend:");
-					num = Console.ReadLine();
-					Reqdiv.Dividend = int.Parse(num);
+					op = Console.ReadLine();
+					Reqdiv.Dividend = int.Parse(op);
 
 					Console.WriteLine("Divisor:");
-					num = Console.ReadLine();
-					Reqdiv.Divisor = int.Parse(num);
+					op = Console.ReadLine();
+					Reqdiv.Divisor = int.Parse(op);
 
-				} while (number != 0);
-
-				HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+				HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"{url}div");
 				req.Method = "POST";
 				req.ContentType = "application/json";
-				req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+
+				if (Id_Tracking != "")
+				{
+					req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);
+				}
 
 				// Opens a stream,converts the request to Json and send it 
 				using (StreamWriter sw = new StreamWriter(req.GetRequestStream()))
@@ -235,27 +227,24 @@ namespace CalculatorService.client2
 					sr.Close();
 					Response.Close();
 				}
-
-				
-				
 			}
 			catch (Exception e)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(e.Message);
 				Console.ForegroundColor = ConsoleColor.Gray;
-				Div(Id_Tracking);
+				logger.Error(e.Message);
 			}
 		}
 		#endregion
+
 		#region Journal
 		public void Journal(string Id_Tracking)
 		{
-			url = "http://localhost:53459/calculator/history";
 			logger.Info(url);
 
 			// Connects to the server and sends the request
-			HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+			HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"{url}history");
 			req.Method = "GET";
 			req.ContentType = "application/json";
 			req.Headers.Add("X_Evi_Tracking_Id", Id_Tracking);

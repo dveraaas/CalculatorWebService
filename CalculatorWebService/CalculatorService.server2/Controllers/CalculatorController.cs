@@ -5,7 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using NLog;
+using CalculatorService.server2;
 using CalculatorService.server2.Models;
+using CalculatorService.server2.Controllers;
 
 namespace CalculatorService.server2.Controllers
 {
@@ -24,46 +26,39 @@ namespace CalculatorService.server2.Controllers
 			logger.Trace("----- Method Add -----");
 			try
 			{
-				if (Reqadd.Addends == null || Reqadd == null)
+				if (Reqadd == null || Reqadd.Addends == null)
 				{
-					throw new Exception("Null Request");
+					throw new ArgumentNullException();
 				}
 
 				foreach (int item in Reqadd.Addends)
 				{
 					response.Sum += item;
-					operation += item + " + ";
+					operation +=$"{item} + ";
 				}
 
 				operation = operation.Substring(0, operation.Length - 3);
 
-				//Json = JsonConvert.SerializeObject(response.Operation+" = "+response.Total);
-				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Sum }");
 
-				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
-						{
-							string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
+				if(Request.Headers.GetValues("X_Evi_Tracking_Id") != null && Request.Headers.GetValues("X_Evi_Tracking_Id").Any()) { 
 
-								Journal journal = new Journal();
-								Operations Operation = new Operations();
-								Operation.operation = "Sum";
-								Operation.Calculation = $"{operation} = {response.Sum}";
-								Operation.Date = new DateTime();
-								Operation.Key = key;
+						string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First();
 
-								journal.StoreOperation(Operation);
-						}
+						JournalService.StoreOperation(CreateOperation("Sum", $"{operation} = {response.Sum}", DateTime.Now, key));
+				}
+
 				string json = JsonConvert.SerializeObject(response);
 				return json;	
 			}
-			catch (Exception e)
+			catch (ArgumentNullException e)
 			{
 				logger.Error(e.Message);
 				return e.Message;
 			}
 		}
 		#endregion
+
 		#region /calculator2/sub
 		[HttpPost]
 		[ActionName("sub")]
@@ -72,19 +67,19 @@ namespace CalculatorService.server2.Controllers
 			SubResponse response = new SubResponse();
 			string operation = "";
 			int total = 0;
-			response.Difference = Reqsub.Nums[0];
+			
 			logger.Trace("----- Method Subtract -----");
 			try
 			{
-				if (Reqsub.Nums == null || Reqsub == null)
+				if (Reqsub == null || Reqsub.Nums == null)
 				{
-					throw new Exception("Null Request");
+					throw new ArgumentNullException();
 				}
-
+				response.Difference = Reqsub.Nums[0];
 				for (int i = 0; i < Reqsub.Nums.Length; i++)
 				{
 					total += Reqsub.Nums[i];
-					operation += Reqsub.Nums[i] + " - ";
+					operation += $"{Reqsub.Nums[i]} - ";
 				}
 
 				// Subtracts the first number and delete the last '-'
@@ -93,33 +88,27 @@ namespace CalculatorService.server2.Controllers
 
 				operation = operation.Substring(0, operation.Length - 3);
 
-				//Json = JsonConvert.SerializeObject(response.Operation+" = "+response.Total);
-				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Difference}");
 
-				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id") != null && Request.Headers.GetValues("X_Evi_Tracking_Id").Any())
 				{
-					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
 
-						Journal journal = new Journal();
-						Operations Operation = new Operations();
-						Operation.operation = "Dif";
-						Operation.Calculation = $"{operation} = {response.Difference}";
-						Operation.Date = new DateTime();
-						Operation.Key = key;
+					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First();
 
-					journal.StoreOperation(Operation);
+					JournalService.StoreOperation(CreateOperation("Dif", $"{operation} = {response.Difference}", DateTime.Now, key));
 				}
+
 				string json = JsonConvert.SerializeObject(response);
 				return json;
 			}
-			catch (Exception e)
+			catch (ArgumentNullException e)
 			{
 				logger.Error(e.Message);
 				return e.Message;
 			}
 		}
 		#endregion
+		
 		#region /calculator2/mult
 		[HttpPost]
 		[ActionName("mult")]
@@ -130,46 +119,39 @@ namespace CalculatorService.server2.Controllers
 			logger.Trace("----- Method Multiply -----");
 			try
 			{
-				if (Reqmult.Factors == null || Reqmult == null)
+				if (Reqmult == null || Reqmult.Factors == null)
 				{
-					throw new Exception("Null Request");
+					throw new ArgumentNullException();
 				}
 				response.Product = 1;
 				foreach (int item in Reqmult.Factors)
 				{
 					response.Product *= item;
-					operation += item + " * ";
+					operation += $"{item} * ";
 				}
 
 				operation = operation.Substring(0, operation.Length - 3);
 
-				//Json = JsonConvert.SerializeObject(response.Operation+" = "+response.Total);
-				//Json = response.Operation + " = " + response.Total;
 				logger.Trace($"{operation} = {response.Product}");
 
-				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id") != null && Request.Headers.GetValues("X_Evi_Tracking_Id").Any())
 				{
-					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
+					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First();
 
-					Journal journal = new Journal();
-					Operations Operation = new Operations();
-					Operation.operation = "Mult";
-					Operation.Calculation = $"{operation} = {response.Product}";
-					Operation.Date = new DateTime();
-					Operation.Key = key;
-
-					journal.StoreOperation(Operation);
+					JournalService.StoreOperation(CreateOperation("Mul", $"{operation} = {response.Product}", DateTime.Now, key));
 				}
+
 				string json = JsonConvert.SerializeObject(response);
 				return json;
 			}
-			catch (Exception e)
+			catch (ArgumentNullException e)
 			{
 				logger.Error(e.Message);
 				return e.Message;
 			}
 		}
 		#endregion
+		
 		#region /calculator2/div
 		[HttpPost]
 		[ActionName("div")]
@@ -180,45 +162,45 @@ namespace CalculatorService.server2.Controllers
 			logger.Trace("----- Method Divide -----");
 			try
 			{
-				if ((Reqdiv.Dividend == null || Reqdiv.Divisor == null) || Reqdiv == null)
+				if (Reqdiv == null || !(Reqdiv.Dividend.HasValue || Reqdiv.Divisor.HasValue))
 				{
-					throw new Exception("Null Request");
+					throw new ArgumentNullException();
 				}
 				if (Reqdiv.Divisor == 0)
 				{
-					throw new Exception("The operation result is Infinite");
-				}else
-				{
-					response.Quotient = Reqdiv.Dividend / Reqdiv.Divisor;
-					response.Remainder = Reqdiv.Dividend % Reqdiv.Divisor;
-					
+					throw new DivideByZeroException();
+					//throw new Exception("The operation result is Infinite");
 				}
-				operation = Reqdiv.Dividend + " / " + Reqdiv.Divisor;
+				else
+				{
+					response.Quotient = Reqdiv.Dividend.Value / Reqdiv.Divisor.Value;
+					response.Remainder = Reqdiv.Dividend.Value % Reqdiv.Divisor.Value;
 
-				//Json = JsonConvert.SerializeObject(response.Operation+" = "+response.Total);
-				//Json = response.Operation + " = " + response.Total;
+				}
+
+				operation = $"{Reqdiv.Dividend} / {Reqdiv.Divisor}";
+
 				logger.Trace($"{operation} = {response.Quotient}(Reaminder: {response.Remainder})");
 
-				if (Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString() != null)
+				if (Request.Headers.GetValues("X_Evi_Tracking_Id") != null && Request.Headers.GetValues("X_Evi_Tracking_Id").Any())
 				{
-					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
+					string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First();
 
-					Journal journal = new Journal();
-					Operations Operation = new Operations();
-					Operation.operation = "Div";
-					Operation.Calculation = $"{operation} = {response.Quotient}(Remainder: {response.Remainder})";
-					Operation.Date = new DateTime();
-					Operation.Key = key;
-
-					journal.StoreOperation(Operation);
+					JournalService.StoreOperation(CreateOperation("Div", $"{operation} = {response.Quotient}(Remainder: {response.Remainder})", DateTime.Now, key));
 				}
+
 				string json = JsonConvert.SerializeObject(response);
 				return json;
 			}
-			catch (Exception e)
+			catch (ArgumentNullException e)
 			{
 				logger.Error(e.Message);
 				return e.Message;
+			}
+			catch (DivideByZeroException ex)
+			{
+				logger.Error(ex.Message);
+				return ex.Message;
 			}
 		}
 		#endregion
@@ -231,9 +213,9 @@ namespace CalculatorService.server2.Controllers
 			string history = "";
 			try
 			{
-				string key = Request.Headers.GetValues("X_Evi_Tracking_Id").First().ToString();
-				Journal journal = new Journal();
-				history = journal.GetJournal();
+				string key = Request.Headers.GetValues("X_Evi_Tracking_Id").FirstOrDefault();
+				history = JournalService.GetJournal();
+
 				return history;
 			}
 			catch (Exception e)
@@ -243,5 +225,22 @@ namespace CalculatorService.server2.Controllers
 			}
 		}
 		#endregion
+
+		/* Adicional Method */
+		#region CreateOperation
+
+		public Operations CreateOperation(string method, string op, DateTime date, string key)
+		{
+			Operations Operation = new Operations();
+			Operation.operation = method;
+			Operation.Calculation = op;
+			Operation.Date = date;
+			Operation.Key = key;
+
+			return Operation;
+
+		}
+		#endregion
+
 	}
 }
