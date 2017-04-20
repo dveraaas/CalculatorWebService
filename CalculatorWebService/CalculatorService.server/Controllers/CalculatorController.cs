@@ -172,6 +172,7 @@ namespace CalculatorService.server2.Controllers
 				if (Reqdiv == null || !(Reqdiv.Dividend.HasValue || Reqdiv.Divisor.HasValue))
 				{
 					return Error400().ErrorMessage.ToString();
+					//throw new ArgumentNullException();
 				}
 				if (Reqdiv.Divisor == 0)
 				{
