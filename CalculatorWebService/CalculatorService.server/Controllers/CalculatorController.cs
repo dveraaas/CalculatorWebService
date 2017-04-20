@@ -76,16 +76,16 @@ namespace CalculatorService.server2.Controllers
 					throw new ArgumentNullException();
 				}
 				response.Difference = Reqsub.Nums[0];
-				
-				for (int i = 0; i < Reqsub.Nums.Length; i++)
+
+				for (int i = 1; i < Reqsub.Nums.Length; i++)
 				{
-					total += Reqsub.Nums[i];
+					response.Difference -= Reqsub.Nums[i];
 					operation += $"{Reqsub.Nums[i]} - ";
 				}
 
 				// Subtracts the first number and delete the last '-'
 				total -= Reqsub.Nums[0];
-				response.Difference -= total;
+				operation = $"{response.Difference} - {operation}";
 
 				operation = operation.Substring(0, operation.Length - 3);
 
