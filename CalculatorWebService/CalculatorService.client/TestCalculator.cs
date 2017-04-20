@@ -30,6 +30,7 @@ namespace CalculatorService.client2
 			Mult(numbers, "http://localhost:53459/calculator/mult");
 			Div(numbers, "http://localhost:53459/calculator/div");
 			Div(new int[] {10, 0 }, "http://localhost:53459/calculator/div");
+			// Nullable int => divisor:0||dividend:0
 			Div(new int[] { }, "http://localhost:53459/calculator/div");
 			GetHistory("http://localhost:53459/calculator/history");
 		}
@@ -171,13 +172,15 @@ namespace CalculatorService.client2
 				Console.WriteLine($"Operacion: {string.Join("/", numbers).Substring(0, string.Join("/", numbers).Length - 2)}");
 			}
 			logger.Info(url);
-			if (numbers.Length == 0)
+
+			DivRequest div = new DivRequest();
+
+			if (numbers.Length != 0)
 			{
-				Console.WriteLine("The request not have values");
+				//Console.WriteLine("The request not have values");
+				div.Dividend = numbers[0];
+				div.Divisor = numbers[1];
 			}
-			else
-			{
-				// Connects to the server and sends the request
 				HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
 				req.Method = "POST";
 				req.ContentType = "application/json";
@@ -185,9 +188,6 @@ namespace CalculatorService.client2
 
 				using (StreamWriter sw = new StreamWriter(req.GetRequestStream()))
 				{
-					DivRequest div = new DivRequest();
-					div.Dividend = numbers[0];
-					div.Divisor = numbers[1];
 					jsonRequest = JsonConvert.SerializeObject(div);
 					sw.WriteLine(jsonRequest);
 					sw.Close();
@@ -210,7 +210,6 @@ namespace CalculatorService.client2
 
 				logger.Info($"The server responds: {resp}");
 				logger.Info("-------------------------------------------------------------");
-			}
 		}
 		#endregion
 
