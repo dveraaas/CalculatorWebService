@@ -249,13 +249,27 @@ namespace CalculatorService.server2.Controllers
 		}
 		#endregion
 
-		#region
+		#region Error400
 		public static CommonError Error400()
 		{
 			CommonError BadRequest = new CommonError();
 			BadRequest.ErrorCode = "RequestError";
 			BadRequest.ErrorStatus = 400;
 			BadRequest.ErrorMessage = "The request is null or the arguments are null";
+
+			logger.Error($"{BadRequest.ErrorStatus} - {BadRequest.ErrorCode} - {BadRequest.ErrorMessage}");
+
+			return BadRequest;
+		}
+		#endregion
+
+		#region Error500
+		public static CommonError Error500()
+		{
+			CommonError BadRequest = new CommonError();
+			BadRequest.ErrorCode = "InternalError";
+			BadRequest.ErrorStatus = 500;
+			BadRequest.ErrorMessage = "An unexpected error condition was triggered which made impossible to fulfill the request.";
 
 			logger.Error($"{BadRequest.ErrorStatus} - {BadRequest.ErrorCode} - {BadRequest.ErrorMessage}");
 
